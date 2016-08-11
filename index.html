@@ -19,30 +19,46 @@
     </section>
 
     <section class="main-content">
-      <h3>
-<a id="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
-
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here <a href="https://guides.github.com/features/mastering-markdown/">using GitHub Flavored Markdown</a>, select a template crafted by a designer, and publish. After your page is generated, you can check out the new <code>gh-pages</code> branch locally. If you’re using GitHub Desktop, simply sync your repository and you’ll see the new branch.</p>
+      <h1>
+<a id="refine-high-quality-variant-calling" class="anchor" href="#refine-high-quality-variant-calling" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Refine high-quality variant calling</h1>
 
 <h3>
-<a id="designer-templates" class="anchor" href="#designer-templates" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Designer Templates</h3>
+<a id="background" class="anchor" href="#background" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Background</h3>
 
-<p>We’ve crafted some handsome templates for you to use. Go ahead and click 'Continue to layouts' to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved.</p>
+<p>Despite high-throughput sequencing approaches, variant detection is uncertain in few genomic regions and different sequencing settings - coverage, read length, sequencing depth dosage, and sequencing platform. </p>
 
-<h3>
-<a id="creating-pages-manually" class="anchor" href="#creating-pages-manually" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Creating pages manually</h3>
+<p>Few models have been suggested to amerilorate this problem - i.e. the Variant Quality Score Recalibration (VQSR) by the GATK pipeline. However, such models may not be applied in general sequencing setting, or not fully represent sequencing settings in the different context - targeted sequencing, rare variant discovery, or low-cov sequencing data.</p>
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
-
-<h3>
-<a id="authors-and-contributors" class="anchor" href="#authors-and-contributors" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Authors and Contributors</h3>
-
-<p>You can @mention a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor’s GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+<p>Hence, we utilize emprical truth variant set to examine filtering criteria for high-quality variant calling. </p>
 
 <h3>
-<a id="support-or-contact" class="anchor" href="#support-or-contact" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Support or Contact</h3>
+<a id="input-data" class="anchor" href="#input-data" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Input data</h3>
 
-<p>Having trouble with Pages? Check out our <a href="https://help.github.com/pages">documentation</a> or <a href="https://github.com/contact">contact support</a> and we’ll help you sort it out.</p>
+<p>You will use validated variants as a positive set, and non-validated variants as a negative set. "Validated variants" can be the ones obtained from experimental data, or the ones overlapped among different pipeline/ reference sets. </p>
+
+<p>One example is Zook et al. (2014), who evaluates the criteria of high-quality variant calling. In this study, the authors use the set of concordant variant calls from multiple pipelines and sequencing platforms. Then, using <a href="https://en.wikipedia.org/wiki/Receiver_operating_characteristic">receiver operating characteristic (ROC) curves</a>, they showed how false-positive and true-positive rates change while varying the cutoff for different quality metrics, such as read depth, variant quality score.  </p>
+
+<h3>
+<a id="roc-curves" class="anchor" href="#roc-curves" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>ROC curves</h3>
+
+<p>Here we use a simulated dataset to get quality metrics of ~50k variant calls. We set some are validated variants, defined as a positive set for ROC analysis and non-validated ones as a negative set. </p>
+
+<p>When we explore the distribution of each metric (<strong>Figure 1</strong>), some metrics, like GQ and QUAL, have clear distinction between the positive and negative set, so that we can easily infer which threshold will discriminate true-positives (TPs) and true-neagtives (TNs). However, metrics like MQ or DP do not have obvious cutoff for TPs and TNs we may want to use threshold for TPs at the cost of sensitivity.  </p>
+
+<p><img src="https://github.com/joonan30/RefineHighQualVar/blob/master/plot.distribution.png?raw=true" alt="Figure 1"></p>
+
+<p><strong>Figure 1. Distribution of quality metrics between the positive and negative set of variant calls</strong>*</p>
+
+<p>For ROC curve, we use the ROCR package in R, which measures performance and visualize such measurements over a range of cutoffs (<strong>Figure 2</strong>). The script is attached in the repo. </p>
+
+<p><img src="https://github.com/joonan30/RefineHighQualVar/blob/master/plot.roc.png?raw=true" alt="Figure 2"></p>
+
+<p><strong>Figure 2. ROC curves</strong></p>
+
+<h3>
+<a id="reference" class="anchor" href="#reference" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Reference</h3>
+
+<p>Zook et al., Nature Biotechnology (2014). Integrating human sequence data sets provides a resource of benchmark SNP and indel genotype calls (<a href="http://www.nature.com/nbt/journal/v32/n3/full/nbt.2835.html">Link</a>)</p>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/joonan30/RefineHighQualVar">Refinehighqualvar</a> is maintained by <a href="https://github.com/joonan30">joonan30</a>.</span>

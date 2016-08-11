@@ -25,7 +25,7 @@ For ROC curve, we use the ROCR package in R, which measures performance and visu
 
 ![Figure 1](plot.roc.png)
 
-**Figure 2. ROC curves **
+**Figure 2. ROC curves**
 
 ### Reference 
 Zook et al., Nature Biotechnology (2014). Integrating human sequence data sets provides a resource of benchmark SNP and indel genotype calls ([Link] (http://www.nature.com/nbt/journal/v32/n3/full/nbt.2835.html))
